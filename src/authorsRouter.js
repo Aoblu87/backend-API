@@ -1,5 +1,5 @@
 import express from 'express';
-import { Authors } from './models/authors.js';
+import { Author } from './models/authors.js';
 
 const authorsRouter= express.Router();
 // TEST
@@ -8,7 +8,7 @@ authorsRouter.get("/test", async (req, res) => {
   });
 //   Ritorna tutti gli autori
   authorsRouter.get("/", async (req, res) => {
-    const authors = await Authors.find({});
+    const authors = await Author.find({});
     if (!authors) {
         return res.status(404).send();
       }
@@ -18,7 +18,34 @@ authorsRouter.get("/test", async (req, res) => {
   //Ritorna un autore specifico
   authorsRouter.get("/:id", async (req, res) => {
     const {id}= req.params;
-    const authors = await Authors.findById(id);
+    const authors = await Author.findById(id);
+    if (!authors) {
+        return res.status(404).send();
+      }
+
+      res.json(authors);
+  })
+  //Aggiungi un autore
+  authorsRouter.post("/", async (req, res) => {
+    const newAuthor = new Author(req.body);
+    await newAuthor.save();
+    res.status(201).send(newAuthor);
+
+  })
+  //Modifica un autore specifico
+  authorsRouter.put("/:id", async (req, res) => {
+    const {id}= req.params;
+    const authors = await Author.findByIdAndUpdate(id);
+    if (!authors) {
+        return res.status(404).send();
+      }
+
+      res.json(authors);
+  })
+  //Elimina un autore specifico
+  authorsRouter.delete("/:id", async (req, res) => {
+    const {id}= req.params;
+    const authors = await Author.findByIdAndDelete(id);
     if (!authors) {
         return res.status(404).send();
       }
