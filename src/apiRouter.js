@@ -1,4 +1,5 @@
 import express from 'express';
+import authorsRouter from './authorsRouter.js';
 //insieme di rotte
 const apiRouter = express.Router();
 

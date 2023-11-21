@@ -1,16 +1,23 @@
-import  express  from "express";
-const server= express()
+import express from "express";
+import apiRouter from "./apiRouter.js";
+import mongoose from "mongoose";
 
-const port= 3001
+const server = express();
+
+const port = 3001;
 
 server.use("/api", apiRouter);
 
-// creo endpoint TEST
+mongoose
+  .connect(
+    "mongodb+srv://stefaniastruzzi:32K2xdD9cLofhbjV@cluster0.yftyrlv.mongodb.net/epicode"
 
-// server.get("/test", (req, res)=>{
-//     res.json({message:"Hello, world! "})
-// })
-
-server.listen(port,()=>{
-    console.log("Server is listening on port....: " + port )
-})
+  )
+  .then(() => {
+    server.listen(port, () => {
+      console.log("🚀 Server listening to port: " + port);
+    });
+  })
+  .catch(() => {
+    console.log("Errore nella connessione al DB");
+  });
