@@ -1,7 +1,8 @@
 import express from 'express';
 import { Author } from './models/authors.js';
-
+import cors from "cors";
 const authorsRouter= express.Router();
+
 // TEST
 authorsRouter.get("/test", async (req, res) => {
     res.json({ message: "Users router working!" });
@@ -15,6 +16,11 @@ authorsRouter.get("/test", async (req, res) => {
 
     res.json(authors);
   });
+
+
+
+
+
   //Ritorna un autore specifico
   authorsRouter.get("/:id", async (req, res) => {
     const {id}= req.params;

@@ -1,9 +1,14 @@
 import express from 'express';
 import authorsRouter from './authorsRouter.js';
-//insieme di rotte
+import cors from "cors"
 const apiRouter = express.Router();
-
 apiRouter.use(express.json())
+apiRouter.use(cors())
+apiRouter.options('*', cors());
+
+
+//insieme di rotte
+
 
 apiRouter.get("/", (req, res) => {
     res.status(200).send(/*html*/ `
@@ -12,7 +17,7 @@ apiRouter.get("/", (req, res) => {
       <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Bootstrap demo</title>
+        <title>Backend API</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
       </head>
       <body>
