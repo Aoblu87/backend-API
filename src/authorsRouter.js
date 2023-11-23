@@ -35,19 +35,22 @@ authorsRouter.post("/", async (req, res) => {
     res.status(201).send(newAuthor);
   } catch (error) {
     console.log(error);
-    res.status(400).send(error);
+    res.status(500).send(error);
   }
 });
 //Modifica un autore specifico
 authorsRouter.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const authors = await Author.findByIdAndUpdate(id, req.body, { new: true });
+    const updateAuthors = await Author.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
 
-    if (!authors) {
+    if (!updateAuthors) {
       return res.status(404).send();
+    } else {
+      res.json(updateAuthors);
     }
-    res.json(authors);
   } catch (error) {
     console.log(error);
     req.status(400).send(error);
@@ -57,11 +60,12 @@ authorsRouter.put("/:id", async (req, res) => {
 authorsRouter.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const authors = await Author.findByIdAndDelete(id);
-    if (!authors) {
+    const deleteAuthors = await Author.findByIdAndDelete(id);
+    if (!deleteAuthors) {
       return res.status(404).send();
+    } else {
+      res.status(204).send();
     }
-    res.json(authors);
   } catch (error) {
     console.log(error);
     res.status(400).send(error);
