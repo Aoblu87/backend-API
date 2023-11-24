@@ -1,12 +1,12 @@
-import express from 'express';
-import authorsRouter from './authorsRouter.js';
-import blogPostsRouter from './blogPostsRouter.js';
-import cors from "cors"
+import express from "express";
+import authorsRouter from "./authorsRouter.js";
+import blogPostsRouter from "./blogPostsRouter.js";
+import cors from "cors";
 const apiRouter = express.Router();
-apiRouter.use(express.json())
-apiRouter.use(cors())
 
+apiRouter.use(express.json());
 
+apiRouter.use(cors());
 
 //Rotta per AUTORI
 
@@ -14,13 +14,7 @@ apiRouter.use("/authors", authorsRouter);
 
 //Rotta per i BLOG POSTS
 
-apiRouter.use("/blogPosts", blogPostsRouter)
-
-
-
-
-
-
+apiRouter.use("/blogPosts", blogPostsRouter);
 
 // apiRouter.get("/", (req, res) => {
 //     res.status(200).send(/*html*/ `
@@ -50,5 +44,4 @@ apiRouter.use("/blogPosts", blogPostsRouter)
 //     res.status(200).send();
 //   });
 
-
-  export default apiRouter;
+export default apiRouter;

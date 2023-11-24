@@ -79,13 +79,12 @@ blogPostsRouter.delete("/:id", async (req, res) => {
   }
 });
 
-blogPostsRouter.get("/blogPosts?title=", async (req, res) => {
+blogPostsRouter.get("/", async (req, res) => {
   try {
-    const { title } = req.params;
-    const titleQuery = req.query;
+    const titleQuery = req.query.title;
 
     // Controlla se è stato fornito un parametro "title" nella query
-    if (!titleQuery(title)) {
+    if (!titleQuery) {
       return res
         .status(400)
         .json({ messaggio: 'Il parametro "title" è obbligatorio' });
@@ -93,7 +92,7 @@ blogPostsRouter.get("/blogPosts?title=", async (req, res) => {
 
     // Esegui la ricerca dei blog per titolo
     const blogPosts = await BlogPost.find({
-      title: { $regex: titleQuery(title), $options: "i" },
+      title: { $regex: titleQuery, $options: "i" },
     });
 
     res.json({ blogPosts });
