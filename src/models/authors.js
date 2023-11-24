@@ -1,26 +1,25 @@
 import mongoose, { Schema } from "mongoose";
 
-
 const AuthorSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
   },
   surname: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
-    required: true
+    required: true,
   },
   birthday: {
     type: String,
-    required: true
+    required: true,
   },
   avatar: {
     type: String,
-    required: true
+    required: true,
   },
 });
 

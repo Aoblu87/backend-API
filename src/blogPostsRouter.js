@@ -3,29 +3,35 @@ import { BlogPost } from "./models/blogPosts.js";
 
 const blogPostsRouter = express.Router();
 
-// TEST
-blogPostsRouter.get("/test", async (req, res) => {
-  res.json({ message: "Users router working!" });
-});
 //   Ritorna tutti i blogPosts
 blogPostsRouter.get("/", async (req, res) => {
-  const blogPosts = await BlogPost.find({});
-  if (!blogPosts) {
-    return res.status(404).send();
-  }
+  try {
+    const blogPosts = await BlogPost.find({});
+    if (!blogPosts) {
+      return res.status(404).send();
+    }
 
-  res.json(blogPosts);
+    res.json(blogPosts);
+  } catch (error) {
+    console.log(error);
+    res.status(505).send(error);
+  }
 });
 
 //Ritorna specifico blogPosts
 blogPostsRouter.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  const blogPost = await BlogPost.findById(id);
-  if (!blogPost) {
-    return res.status(404).send();
-  }
+  try {
+    const { id } = req.params;
+    const blogPost = await BlogPost.findById(id);
+    if (!blogPost) {
+      return res.status(404).send();
+    }
 
-  res.json(blogPost);
+    res.json(blogPost);
+  } catch (error) {
+    console.log(error);
+    res.status(505).send(error);
+  }
 });
 
 //Aggiungi un blogPost
@@ -72,4 +78,29 @@ blogPostsRouter.delete("/:id", async (req, res) => {
     res.status(400).send(error);
   }
 });
+
+blogPostsRouter.get("/blogPosts?title=", async (req, res) => {
+  try {
+    const { title } = req.params;
+    const titleQuery = req.query;
+
+    // Controlla se è stato fornito un parametro "title" nella query
+    if (!titleQuery(title)) {
+      return res
+        .status(400)
+        .json({ messaggio: 'Il parametro "title" è obbligatorio' });
+    }
+
+    // Esegui la ricerca dei blog per titolo
+    const blogPosts = await BlogPost.find({
+      title: { $regex: titleQuery(title), $options: "i" },
+    });
+
+    res.json({ blogPosts });
+  } catch (errore) {
+    console.error(errore);
+    res.status(500).json({ messaggio: "Errore del server" });
+  }
+});
+
 export default blogPostsRouter;

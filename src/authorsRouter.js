@@ -1,5 +1,6 @@
 import express from "express";
 import { Author } from "./models/authors.js";
+import { BlogPost } from "./models/blogPosts.js";
 
 const authorsRouter = express.Router();
 
@@ -9,24 +10,51 @@ authorsRouter.get("/test", async (req, res) => {
 });
 //   Ritorna tutti gli autori
 authorsRouter.get("/", async (req, res) => {
-  const authors = await Author.find({});
-  if (!authors) {
-    return res.status(404).send();
-  }
+  try {
+    const authors = await Author.find({});
+    if (!authors) {
+      return res.status(404).send();
+    }
 
-  res.json(authors);
+    res.json(authors);
+  } catch (error) {
+    console.log(error);
+    res.status(505).send(error);
+  }
 });
 
 //Ritorna un autore specifico
 authorsRouter.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  const authors = await Author.findById(id);
-  if (!authors) {
-    return res.status(404).send();
-  }
+  try {
+    const { id } = req.params;
+    const authors = await Author.findById(id);
+    if (!authors) {
+      return res.status(404).send();
+    }
 
-  res.json(authors);
+    res.json(authors);
+  } catch (error) {
+    console.log(error);
+    res.status(505).send(error);
+  }
 });
+
+//Ritorna i post di un autore specifico
+authorsRouter.get("/:id/blogPosts", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const author = await Author.findById(id);
+    if (!author) {
+      return res.status(404).json({ messaggio: "Autore non trovato" });
+    }
+    const blogPosts = await BlogPost.find({ "author._id": id });
+    res.json(blogPosts);
+  } catch (error) {
+    console.log(error);
+    res.status(505).send(error);
+  }
+});
+
 //Aggiungi un autore
 authorsRouter.post("/", async (req, res) => {
   try {

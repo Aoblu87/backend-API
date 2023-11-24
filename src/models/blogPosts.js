@@ -19,17 +19,19 @@ const BlogPostsSchema = new Schema({
     },
     unit: {
       type: String,
-      required: true,
+      default: "minute",
     },
   },
   author: {
-    name: {
+    _id: {
       type: String,
       required: true,
     },
+    name: {
+      type: String,
+    },
     avatar: {
       type: String,
-      required: true,
     },
   },
 
