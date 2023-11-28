@@ -9,7 +9,7 @@ authorsRouter.get("/test", async (req, res) => {
   res.json({ message: "Users router working!" });
 });
 //   Ritorna tutti gli autori
-authorsRouter.get("/", async (req, res) => {
+authorsRouter.get("/", async (req, res, next) => {
   try {
     const authors = await Author.find({});
     if (!authors) {
@@ -19,7 +19,7 @@ authorsRouter.get("/", async (req, res) => {
     res.json(authors);
   } catch (error) {
     console.log(error);
-    res.status(505).send(error);
+    next(error);
   }
 });
 

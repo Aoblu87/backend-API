@@ -79,23 +79,24 @@ blogPostsRouter.delete("/:id", async (req, res) => {
   }
 });
 
+// trova per TITOLO
 blogPostsRouter.get("/", async (req, res) => {
   try {
-    const titleQuery = req.query.title;
+    const query = req.query.title;
 
     // Controlla se è stato fornito un parametro "title" nella query
-    if (!titleQuery) {
+    if (!query) {
       return res
         .status(400)
         .json({ messaggio: 'Il parametro "title" è obbligatorio' });
     }
 
     // Esegui la ricerca dei blog per titolo
-    const blogPosts = await BlogPost.find({
-      title: { $regex: titleQuery, $options: "i" },
+    const titleResult = await BlogPost.find({
+      title: { $regex: query, $options: "i" },
     });
 
-    res.json({ blogPosts });
+    res.json({ titleResult });
   } catch (errore) {
     console.error(errore);
     res.status(500).json({ messaggio: "Errore del server" });
