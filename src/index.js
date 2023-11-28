@@ -1,10 +1,11 @@
 import express from "express";
 import mongoose from "mongoose";
 import apiRouter from "./apiRouter.js";
+import { genericError } from "./middlewares/genericError.js";
 
 const server = express();
 
-const port = 3001;
+const port = 3030;
 
 server.use("/api", apiRouter);
 server.use(genericError);

@@ -6,7 +6,10 @@ const blogPostsRouter = express.Router();
 //   Ritorna tutti i blogPosts
 blogPostsRouter.get("/", async (req, res) => {
   try {
-    const blogPosts = await BlogPost.find({});
+    const { title } = req.query;
+    const blogPosts = await BlogPost.find(
+      title ? { title: { $regex: title, $options: "i" } } : {}
+    );
     if (!blogPosts) {
       return res.status(404).send();
     }
@@ -76,30 +79,6 @@ blogPostsRouter.delete("/:id", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(400).send(error);
-  }
-});
-
-// trova per TITOLO
-blogPostsRouter.get("/", async (req, res) => {
-  try {
-    const query = req.query.title;
-
-    // Controlla se è stato fornito un parametro "title" nella query
-    if (!query) {
-      return res
-        .status(400)
-        .json({ messaggio: 'Il parametro "title" è obbligatorio' });
-    }
-
-    // Esegui la ricerca dei blog per titolo
-    const titleResult = await BlogPost.find({
-      title: { $regex: query, $options: "i" },
-    });
-
-    res.json({ titleResult });
-  } catch (errore) {
-    console.error(errore);
-    res.status(500).json({ messaggio: "Errore del server" });
   }
 });
 
