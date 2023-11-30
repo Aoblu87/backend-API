@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import apiRouter from "./apiRouter.js";
+import apiRouter from "./routers/apiRouter.js";
 import { genericError } from "./middlewares/genericError.js";
 
 const server = express();

@@ -1,5 +1,5 @@
 import express from "express";
-import { BlogPost } from "./models/blogPosts.js";
+import { BlogPost } from "../models/blogPosts.js";
 
 const blogPostsRouter = express.Router();
 
@@ -9,7 +9,7 @@ blogPostsRouter.get("/", async (req, res) => {
     const { title } = req.query;
     const blogPosts = await BlogPost.find(
       title ? { title: { $regex: title, $options: "i" } } : {}
-    );
+    ).populate("author", "firstName lastName avatar");
     if (!blogPosts) {
       return res.status(404).send();
     }
@@ -81,5 +81,7 @@ blogPostsRouter.delete("/:id", async (req, res) => {
     res.status(400).send(error);
   }
 });
+
+//--------------------------- Rotte per COMMENTI------------------
 
 export default blogPostsRouter;

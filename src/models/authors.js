@@ -1,11 +1,11 @@
 import mongoose, { Schema } from "mongoose";
 
 const AuthorSchema = new Schema({
-  name: {
+  firstName: {
     type: String,
     required: true,
   },
-  surname: {
+  lastName: {
     type: String,
     required: true,
   },
@@ -13,13 +13,12 @@ const AuthorSchema = new Schema({
     type: String,
     required: true,
   },
-  birthday: {
+  dayOfBirth: {
     type: String,
     required: true,
   },
   avatar: {
     type: String,
-    required: true,
   },
 });
 

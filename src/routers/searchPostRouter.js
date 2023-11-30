@@ -1,6 +1,6 @@
 import express from "express";
-import { BlogPost } from "./models/blogPosts.js";
-import { genericError } from "./middlewares/genericError.js";
+import { BlogPost } from "../models/blogPosts.js";
+import { genericError } from "../middlewares/genericError.js";
 const searchPostRouter = express.Router();
 
 // trova per TITOLO
