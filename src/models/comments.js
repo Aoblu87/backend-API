@@ -1,0 +1,16 @@
+import mongoose, { Schema } from "mongoose";
+const CommentsSchema = new Schema({
+  rate: {
+    type: String,
+    required: true,
+  },
+  text: {
+    type: String,
+    required: true,
+  },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: "authors",
+  },
+});
+export const Comment = mongoose.model("comments", CommentsSchema);

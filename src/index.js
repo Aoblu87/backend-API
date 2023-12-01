@@ -2,13 +2,18 @@ import express from "express";
 import mongoose from "mongoose";
 import apiRouter from "./routers/apiRouter.js";
 import { genericError } from "./middlewares/genericError.js";
+import { checkAuth } from "./middlewares/checkAuth.js";
+import { notFound } from "./middlewares/notFound.js";
 
 const server = express();
 
 const port = 3030;
 
 server.use("/api", apiRouter);
+//MIDDLEWARES
 server.use(genericError);
+
+// server.use(notFound);
 
 // server.use(cors())
 // server.options('*', cors());
