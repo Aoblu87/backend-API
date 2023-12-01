@@ -31,13 +31,10 @@ const BlogPostsSchema = new Schema({
     type: String,
     required: true,
   },
-  comment: {
-    type: Schema.Types.ObjectId,
+  comments: {
+    type: [Schema.Types.ObjectId],
     ref: "comments",
-    author: {
-      type: Schema.Types.ObjectId,
-      ref: "authors",
-    },
+    default: [],
   },
 });
 

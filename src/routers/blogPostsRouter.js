@@ -1,5 +1,6 @@
 import express from "express";
 import { BlogPost } from "../models/blogPosts.js";
+import { Comment } from "../models/comments.js";
 
 const blogPostsRouter = express.Router();
 
@@ -81,42 +82,42 @@ blogPostsRouter
       console.log(error);
       res.status(400).send(error);
     }
+  })
+
+  //--------------------------- Rotte per COMMENTI------------------
+  // TUTTI I COMMENTI DI UN POST
+  .get("/:id/comments", async (req, res, next) => {
+    try {
+      const comments = await BlogPost.findById(req.params.id).select("comment");
+      if (!comments) {
+        return res.status(404).send();
+      } else {
+        res.status(204).send();
+      }
+      res.json(comments);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
+    }
+  })
+  //AGGIUNGI COMMENTO AL POST
+  .post("/:id", async (req, res, next) => {
+    try {
+      const blogPost = await BlogPost.findById(req.params.id);
+      if (!blogPost) {
+        return res.status(404).send();
+      }
+      const newComment = new Comment(req.body);
+
+      blogPost.comments.push(newComment);
+      await newComment.save();
+      await blogPost.save();
+
+      res.status(201).send(newComment);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
+    }
   });
-
-//--------------------------- Rotte per COMMENTI------------------
-// TUTTI I COMMENTI DI UN POST
-// .get("/:id/comments", async (req, res, next) => {
-//   try {
-//     const comments = await BlogPost.findById(req.params.id).select("comment");
-//     if (!comments) {
-//       return res.status(404).send();
-//     } else {
-//       res.status(204).send();
-//     }
-//     res.json(comments);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(400).send(error);
-//   }
-// });
-// .post("/:id", async (req, res, next) => {
-//   try {
-//     const blogPost = await BlogPost.findById(req.params.id);
-//     if (!blogPost) {
-//       return res.status(404).send();
-//     } else {
-//       res.status(204).send();
-//     }
-//     const newComment = new Comment(req.body);
-
-//     await blogPost.save("comment ");
-
-//     res.status(201).send(newComment);
-//     res.json(blogPost);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(400).send(error);
-//   }
-// });
 
 export default blogPostsRouter;
