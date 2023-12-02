@@ -54,14 +54,14 @@ blogPostsRouter
   .put("/:id", async (req, res) => {
     try {
       const { id } = req.params;
-      const updateBlogPosts = await BlogPost.findByIdAndUpdate(id, req.body, {
+      const updatedBlogPosts = await BlogPost.findByIdAndUpdate(id, req.body, {
         new: true,
       });
 
-      if (!updateBlogPosts) {
+      if (!updatedBlogPosts) {
         return res.status(404).send();
       }
-      res.json(updateBlogPosts);
+      res.json(updatedBlogPosts);
     } catch (error) {
       console.log(error);
       req.status(400).send(error);
@@ -88,13 +88,30 @@ blogPostsRouter
   // TUTTI I COMMENTI DI UN POST
   .get("/:id/comments", async (req, res, next) => {
     try {
-      const comments = await BlogPost.findById(req.params.id).select("comment");
-      if (!comments) {
+      const blogPost = await BlogPost.findById(req.params.id)
+        .populate("comments")
+        .select("comments");
+      if (!blogPost) {
         return res.status(404).send();
-      } else {
-        res.status(204).send();
       }
-      res.json(comments);
+      res.json(blogPost);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
+    }
+  })
+  //ESTRAPOLARE COMMENTO SPECIFICO DI UN POST
+  .get("/:id/comments/:commentId", async (req, res, next) => {
+    try {
+      const blogPost = await BlogPost.findById(req.params.id);
+      const comment = await Comment.findById(req.params.commentId);
+
+      if (!blogPost) {
+        return res.status(404).send();
+      } else if (!comment) {
+        return res.status(404).send();
+      }
+      res.json(comment);
     } catch (error) {
       console.log(error);
       res.status(400).send(error);
@@ -114,6 +131,47 @@ blogPostsRouter
       await blogPost.save();
 
       res.status(201).send(newComment);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
+    }
+  })
+  //MODIFICA COMMENTO
+  .put("/:id/comments/:commentId", async (req, res, next) => {
+    try {
+      const blogPost = await BlogPost.findById(req.params.id);
+      const updatedComment = await Comment.findByIdAndUpdate(
+        req.params.commentId,
+        req.body,
+        { new: true }
+      );
+
+      if (!blogPost) {
+        return res.status(404).send();
+      } else if (!updatedComment) {
+        return res.status(404).send();
+      }
+      res.json(updatedComment);
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
+    }
+  })
+  //CANCELLA COMMENTO
+  .delete("/:id/comments/:commentId", async (req, res, next) => {
+    try {
+      const blogPost = await BlogPost.findById(req.params.id);
+      const deletedComment = await Comment.findByIdAndDelete(
+        req.params.commentId
+      );
+
+      if (!blogPost) {
+        return res.status(404).send();
+      } else if (!deletedComment) {
+        return res.status(404).send();
+      } else {
+        res.status(204).send();
+      }
     } catch (error) {
       console.log(error);
       res.status(400).send(error);
