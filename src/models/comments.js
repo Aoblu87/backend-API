@@ -11,6 +11,7 @@ const CommentsSchema = new Schema({
   author: {
     type: Schema.Types.ObjectId,
     ref: "authors",
+    required: true,
   },
   blogPost: {
     type: Schema.Types.ObjectId,

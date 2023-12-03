@@ -18,7 +18,7 @@ searchPostRouter.get("/", async (req, res, next) => {
     // Esegui la ricerca dei blog per titolo
     const titleResult = await BlogPost.find({
       title: { $regex: title, $options: "i" },
-    });
+    }).populate("author");
 
     res.json(titleResult);
   } catch (errore) {

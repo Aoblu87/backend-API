@@ -88,13 +88,13 @@ blogPostsRouter
   // TUTTI I COMMENTI DI UN POST
   .get("/:id/comments", async (req, res, next) => {
     try {
-      const blogPost = await BlogPost.findById(req.params.id)
+      const comments = await BlogPost.findById(req.params.id)
         .populate("comments")
         .select("comments");
-      if (!blogPost) {
+      if (!comments) {
         return res.status(404).send();
       }
-      res.json(blogPost);
+      res.json(comments);
     } catch (error) {
       console.log(error);
       res.status(400).send(error);
