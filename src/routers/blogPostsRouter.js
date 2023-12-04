@@ -89,11 +89,13 @@ blogPostsRouter
   .get("/:id/comments", async (req, res, next) => {
     try {
       const comments = await BlogPost.findById(req.params.id)
-        .populate("comments")
-        .select("comments");
+        .populate("comments author")
+        .select("comments -_id");
+
       if (!comments) {
         return res.status(404).send();
       }
+
       res.json(comments);
     } catch (error) {
       console.log(error);
