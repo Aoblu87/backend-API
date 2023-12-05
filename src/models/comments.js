@@ -21,5 +21,9 @@ const CommentsSchema = new Schema({
     type: String,
     required: true,
   },
+  replyto: {
+    type: Schema.Types.ObjectId,
+    ref: "blogPosts.comments",
+  },
 });
 export const Comment = mongoose.model("comments", CommentsSchema);

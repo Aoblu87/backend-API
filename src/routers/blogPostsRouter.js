@@ -1,6 +1,7 @@
 import express from "express";
 import { BlogPost } from "../models/blogPosts.js";
 import { Comment } from "../models/comments.js";
+import uploadFile from "../middlewares/uploadFile.js";
 
 const blogPostsRouter = express.Router();
 
@@ -88,7 +89,7 @@ blogPostsRouter
   // TUTTI I COMMENTI DI UN POST
   .get("/:id/comments", async (req, res, next) => {
     try {
-      const comments = await BlogPost.findById(req.params.id)
+      const { comments } = await BlogPost.findById(req.params.id)
         .populate({
           path: "comments",
           populate: {
@@ -184,6 +185,32 @@ blogPostsRouter
       console.log(error);
       res.status(400).send(error);
     }
-  });
+  })
+  //AGGIUNGI COVER
+  .patch(
+    "/:blogPostId/cover",
+    uploadFile.single("cover"),
+    async (req, res, next) => {
+      try {
+        if (!req.file) {
+          return res.status(400).json({ error: "Nessun file caricato." });
+        }
+
+        const addCover = await BlogPost.findByIdAndUpdate(
+          req.params.blogPostId,
+          { cover: req.file.path },
+          { new: true }
+        );
+
+        if (!addCover) {
+          return res.status(404).json({ error: "BlogPost non trovato." });
+        } else {
+          res.json(addCover);
+        }
+      } catch (error) {
+        next(error);
+      }
+    }
+  );
 
 export default blogPostsRouter;

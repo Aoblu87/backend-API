@@ -1,13 +1,20 @@
 import express from "express";
 import { Author } from "../models/authors.js";
 import { BlogPost } from "../models/blogPosts.js";
+import uploadFile from "../middlewares/uploadFile.js";
+// import multer from "multer";
+// import { CloudinaryStorage } from "multer-storage-cloudinary";
+// import { v2 as cloudinary } from "cloudinary";
 
 const authorsRouter = express.Router();
+// const cloudinaryStorage = new CloudinaryStorage({
+//   cloudinary,
+//   params: {
+//     folder: "epicode-test-backend",
+//   },
+// });
+// const upload = multer({ storage: cloudinaryStorage });
 
-// TEST
-authorsRouter.get("/test", async (req, res) => {
-  res.json({ message: "Users router working!" });
-});
 //   Ritorna tutti gli autori
 authorsRouter.get("/", async (req, res, next) => {
   try {
@@ -85,18 +92,49 @@ authorsRouter.put("/:id", async (req, res) => {
   }
 });
 //Elimina un autore specifico
-authorsRouter.delete("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const deleteAuthors = await Author.findByIdAndDelete(id);
-    if (!deleteAuthors) {
-      return res.status(404).send();
-    } else {
-      res.status(204).send();
+authorsRouter
+  .delete("/:id", async (req, res) => {
+    try {
+      const { id } = req.params;
+      const deleteAuthors = await Author.findByIdAndDelete(id);
+      if (!deleteAuthors) {
+        return res.status(404).send();
+      } else {
+        res.status(204).send();
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(400).send(error);
     }
-  } catch (error) {
-    console.log(error);
-    res.status(400).send(error);
-  }
-});
+  })
+
+  //AGGIUNGI AVATAR
+  .patch(
+    "/:authorId/avatar",
+    uploadFile.single("avatar"),
+    async (req, res, next) => {
+      try {
+        if (!req.file) {
+          return res
+            .status(400)
+            .json({ error: "Nessun file avatar caricato." });
+        }
+
+        const addAvatar = await Author.findByIdAndUpdate(
+          req.params.authorId,
+          { avatar: req.file.path },
+          { new: true }
+        );
+
+        if (!addAvatar) {
+          return res.status(404).json({ error: "Autore non trovato." });
+        } else {
+          res.json(addAvatar);
+        }
+      } catch (error) {
+        next(error);
+      }
+    }
+  );
+
 export default authorsRouter;
