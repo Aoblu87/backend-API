@@ -51,6 +51,17 @@ blogPostsRouter
       res.status(500).send(error);
     }
   })
+
+  .post("/", async (req, res) => {
+    try {
+      const newBlogPost = new BlogPost(req.body);
+      await newBlogPost.save();
+      res.status(201).send(newBlogPost);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  })
   //Modifica blogPost specifico
   .put("/:id", async (req, res) => {
     try {
@@ -179,32 +190,45 @@ blogPostsRouter
       console.log(error);
       res.status(400).send(error);
     }
-  });
-//AGGIUNGI COVER
-// .patch(
-//   "/:blogPostId/cover",
-//   uploadFile.single("cover"),
-//   async (req, res, next) => {
-//     try {
-//       if (!req.file) {
-//         return res.status(400).json({ error: "Nessun file caricato." });
-//       }
+  })
+  //AGGIUNGI COVER
+  .patch(
+    "/:blogPostId/cover",
+    uploadFile.single("cover"),
+    async (req, res, next) => {
+      try {
+        if (!req.file) {
+          return res.status(400).json({ error: "Nessun file caricato." });
+        }
 
-//       const addCover = await BlogPost.findByIdAndUpdate(
-//         req.params.blogPostId,
-//         { cover: req.file.path },
-//         { new: true }
-//       );
+        const addCover = await BlogPost.findByIdAndUpdate(
+          req.params.blogPostId,
+          { cover: req.file.path },
+          { new: true }
+        );
 
-//       if (!addCover) {
-//         return res.status(404).json({ error: "BlogPost non trovato." });
-//       } else {
-//         res.json(addCover);
-//       }
-//     } catch (error) {
-//       next(error);
+        if (!addCover) {
+          return res.status(404).json({ error: "BlogPost non trovato." });
+        } else {
+          res.json(addCover);
+        }
+      } catch (error) {
+        next(error);
+      }
+    }
+  );
+// .post("/", uploadFile.single("cover"), async (req, res) => {
+//   try {
+//     if (!req.file) {
+//       return res.status(400).json({ error: "Nessun file caricato." });
 //     }
+//     const newBlogPost = new BlogPost(req.body, { cover: req.file.path });
+//     await newBlogPost.save();
+//     res.status(201).send(newBlogPost);
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send(error);
 //   }
-// );
+// });
 
 export default blogPostsRouter;
