@@ -17,5 +17,12 @@ const CommentsSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "blogPosts",
   },
+  createdAt: {
+    type: String,
+  },
+  // replyto: {
+  //   type: Schema.Types.ObjectId,
+  //   ref: "blogPosts.comments",
+  // },
 });
 export const Comment = mongoose.model("comments", CommentsSchema);

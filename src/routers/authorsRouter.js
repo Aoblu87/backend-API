@@ -99,4 +99,34 @@ authorsRouter.delete("/:id", async (req, res) => {
     res.status(400).send(error);
   }
 });
+
+//AGGIUNGI AVATAR
+// .patch(
+//   "/:authorId/avatar",
+//   uploadFile.single("avatar"),
+//   async (req, res, next) => {
+//     try {
+//       if (!req.file) {
+//         return res
+//           .status(400)
+//           .json({ error: "Nessun file avatar caricato." });
+//       }
+
+//       const addAvatar = await Author.findByIdAndUpdate(
+//         req.params.authorId,
+//         { avatar: req.file.path },
+//         { new: true }
+//       );
+
+//       if (!addAvatar) {
+//         return res.status(404).json({ error: "Autore non trovato." });
+//       } else {
+//         res.json(addAvatar);
+//       }
+//     } catch (error) {
+//       next(error);
+//     }
+//   }
+// );
+
 export default authorsRouter;
