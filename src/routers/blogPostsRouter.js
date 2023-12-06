@@ -217,18 +217,5 @@ blogPostsRouter
       }
     }
   );
-// .post("/", uploadFile.single("cover"), async (req, res) => {
-//   try {
-//     if (!req.file) {
-//       return res.status(400).json({ error: "Nessun file caricato." });
-//     }
-//     const newBlogPost = new BlogPost(req.body, { cover: req.file.path });
-//     await newBlogPost.save();
-//     res.status(201).send(newBlogPost);
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send(error);
-//   }
-// });
 
 export default blogPostsRouter;
