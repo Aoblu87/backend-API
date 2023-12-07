@@ -1,7 +1,7 @@
 import express from "express";
 import { Author } from "../models/authors.js";
 import { BlogPost } from "../models/blogPosts.js";
-
+import bcrypt from "bcrypt";
 const authorsRouter = express.Router();
 
 // TEST
@@ -56,16 +56,32 @@ authorsRouter.get("/:id/blogPosts", async (req, res) => {
 });
 
 //Aggiungi un autore
-authorsRouter.post("/", async (req, res) => {
-  try {
-    const newAuthor = new Author(req.body);
-    await newAuthor.save();
-    res.status(201).send(newAuthor);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send(error);
-  }
-});
+authorsRouter
+  .post("/", async (req, res) => {
+    try {
+      const password = await bcrypt.hash(req.body.password, 10);
+      const newAuthor = await Author.create({ ...req.body, password });
+      await newAuthor.save();
+      res.status(201).send(newAuthor);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
+  })
+  // CONTROLLARE PASSWORD PER LOGIN
+  .post("/session", async (req, res) => {
+    const { email, password } = req.body;
+    const user = await Author.findOne({ email });
+    if (!user) {
+      return res.status(404).send({ message: "User not found" });
+    }
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      return res.status(401).json({ message: "Invalid password" });
+    }
+    res.status(200).json({ message: "Logged in" });
+  });
+
 //Modifica un autore specifico
 authorsRouter.put("/:id", async (req, res) => {
   try {

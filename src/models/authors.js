@@ -13,6 +13,11 @@ const AuthorSchema = new Schema({
     type: String,
     required: true,
   },
+  password: {
+    type: String,
+    // required: [true, "Password required"],
+    required: true,
+  },
   dayOfBirth: {
     type: String,
     required: true,
