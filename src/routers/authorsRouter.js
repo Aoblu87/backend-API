@@ -47,7 +47,7 @@ authorsRouter
     //   Ritorna tutti gli autori GET
     .get("/", async (req, res, next) => {
         try {
-            const authors = await Author.find({})
+            const authors = await Author.find({}).select("-password")
             if (!authors) {
                 return res.status(404).send()
             }
@@ -63,7 +63,7 @@ authorsRouter
     .get("/:id", async (req, res) => {
         try {
             const { id } = req.params
-            const authors = await Author.findById(id)
+            const authors = await Author.findById(id).select("-password")
             if (!authors) {
                 return res.status(404).send()
             }
@@ -79,7 +79,7 @@ authorsRouter
     .get("/:id/blogPosts", async (req, res) => {
         try {
             const { id } = req.params
-            const author = await Author.findById(id)
+            const author = await Author.findById(id).select("-password")
             if (!author) {
                 return res.status(404).json({ messaggio: "Autore non trovato" })
             }
@@ -95,8 +95,16 @@ authorsRouter
 
     .post("/", async (req, res) => {
         try {
-            const password = await bcrypt.hash(req.body.password, 10)
-            const newAuthor = await Author.create({ ...req.body, password })
+            const { email } = req.body
+            const author = await Author.findOne({ email })
+            if (author) {
+                return res.status(400).send({ message: "Email already exists" })
+            }
+            const password = await bcrypt.hash(req.body.password, 10) // fai hashing della password inserita nella nel body della richiesta del form
+            const newAuthor = await Author.create({
+                ...req.body,
+                password,
+            }) //Crea autore, sovrascrivendo il campo della password con quella criptata
             await newAuthor.save()
             res.status(201).send(newAuthor)
         } catch (error) {
@@ -111,7 +119,7 @@ authorsRouter
             const { id } = req.params
             const updateAuthors = await Author.findByIdAndUpdate(id, req.body, {
                 new: true,
-            })
+            }).select("-password")
 
             if (!updateAuthors) {
                 return res.status(404).send()
