@@ -10,15 +10,18 @@ const authorsRouter = express.Router()
 authorsRouter
     .post("/session", async (req, res) => {
         const { email, password } = req.body
-        const user = await Author.findOne({ email })
-        if (!user) {
+        const author = await Author.findOne({ email })
+        if (!author) {
             return res.status(404).send({ message: "User not found" })
         }
-        const isPasswordCorrect = await bcrypt.compare(password, user.password)
+        const isPasswordCorrect = await bcrypt.compare(
+            password,
+            author.password
+        )
         if (!isPasswordCorrect) {
             return res.status(401).json({ message: "Invalid password" })
         }
-        const payload = { id: user._id }
+        const payload = { id: author._id }
 
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "1h",
