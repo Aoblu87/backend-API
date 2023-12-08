@@ -101,12 +101,22 @@ authorsRouter
                 return res.status(400).send({ message: "Email already exists" })
             }
             const password = await bcrypt.hash(req.body.password, 10) // fai hashing della password inserita nella nel body della richiesta del form
+            //Crea autore, sovrascrivendo il campo della password con quella criptata
             const newAuthor = await Author.create({
                 ...req.body,
                 password,
-            }) //Crea autore, sovrascrivendo il campo della password con quella criptata
+            })
+
+            // Rimuov0 il campo 'password' prima di inviarlo nella risposta
+            const authorWithoutPassword = {
+                _id: newAuthor._id,
+                firstName: newAuthor.firstName,
+                lastName: newAuthor.lastName,
+                email: newAuthor.email,
+            }
+
             await newAuthor.save()
-            res.status(201).send(newAuthor)
+            res.status(201).send(authorWithoutPassword)
         } catch (error) {
             console.log(error)
             res.status(500).send(error)
