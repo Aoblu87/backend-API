@@ -1,13 +1,10 @@
 export const checkAuth = (req, res, next) => {
-  if (req.headers.authorization === "password molto sicura") {
-    next();
-  } else {
-    // res.status(401).json({
-    //   error: "password sbagliata",
-    // });
-    const error = new Error("password sbagliata");
+    if (req.headers.authorization === "password molto sicura") {
+        next()
+    } else {
+        const error = new Error("Wrong Password")
 
-    error.statusCode = 401;
-    next(error);
-  }
-};
+        error.statusCode = 401
+        next(error)
+    }
+}

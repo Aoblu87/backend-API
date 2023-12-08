@@ -2,6 +2,8 @@ import express from "express"
 import { Author } from "../models/authors.js"
 import { BlogPost } from "../models/blogPosts.js"
 import bcrypt from "bcrypt"
+import checkJwt from "../middlewares/checkJwt.js"
+import jwt from "jsonwebtoken"
 const authorsRouter = express.Router()
 
 // AUTENTICAZIONE------------CONTROLLARE PASSWORD PER LOGIN E RESTITUIRE TOKEN
@@ -16,9 +18,29 @@ authorsRouter
         if (!isPasswordCorrect) {
             return res.status(401).json({ message: "Invalid password" })
         }
-        res.status(200).json({ message: "Logged in" })
+        const payload = { id: user._id }
+
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "1h",
+        })
+
+        res.status(200).json({ token, message: "Logged in" })
     })
 
+    // CREA TOKEN---------GET BY ID autore per restituirgli un token, memorizzarlo nel local storage (frontend),controllare che sia valido per effettuare richieste (frontend)
+    .get("/:id", checkJwt, async (req, res) => {
+        const author = await Author.findById(req.params.id)
+
+        if (!author) {
+            res.status(404).json({ message: "User not found" })
+            return
+        }
+
+        // il nostro utente, dopo l'autenticazione, è disponibile dentro req.user
+        // (siccome glielo abbiamo messo noi nel middleware checkJwt)
+
+        res.status(200).json(req.author)
+    })
     //   Ritorna tutti gli autori GET
     .get("/", async (req, res, next) => {
         try {
@@ -33,19 +55,7 @@ authorsRouter
             next(error)
         }
     })
-    // usersRouter.get("/:id", checkJwt, async (req, res) => {
-    // const user = await User.findById(req.params.id)
 
-    // if (!user) {
-    //     res.status(404).json({ message: "User not found" })
-    //     return
-    // }
-
-    // il nostro utente, dopo l'autenticazione, è disponibile dentro req.user
-    // (siccome glielo abbiamo messo noi nel middleware checkJwt)
-
-    //     res.status(200).json(req.user)
-    // })
     //Ritorna un autore specifico GET/:ID
     .get("/:id", async (req, res) => {
         try {
@@ -78,7 +88,7 @@ authorsRouter
         }
     })
 
-    //Aggiungi un autore POST
+    //POST-----Aggiungi un autore e fai HASHING della password
 
     .post("/", async (req, res) => {
         try {
