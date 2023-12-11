@@ -24,6 +24,9 @@ const AuthorSchema = new Schema({
     avatar: {
         type: String,
     },
+    createdAt: {
+        type: String,
+    },
 })
 
 export const Author = mongoose.model("authors", AuthorSchema)

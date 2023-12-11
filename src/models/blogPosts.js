@@ -1,41 +1,46 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose"
 
 const BlogPostsSchema = new Schema({
-  category: {
-    type: String,
-    required: true,
-  },
-  title: {
-    type: String,
-    required: true,
-  },
-  cover: {
-    type: String,
-  },
-  readTime: {
-    value: {
-      type: Number,
-      required: true,
+    category: {
+        type: String,
+        required: true,
     },
-    unit: {
-      type: String,
-      default: "minute",
+    title: {
+        type: String,
+        required: true,
     },
-  },
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: "authors",
-  },
+    cover: {
+        type: String,
+    },
+    readTime: {
+        value: {
+            type: Number,
+            required: true,
+        },
+        unit: {
+            type: String,
+            default: "minute",
+        },
+    },
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: "authors",
+    },
 
-  content: {
-    type: String,
-    required: true,
-  },
-  comments: {
-    type: [Schema.Types.ObjectId],
-    ref: "comments",
-    default: [],
-  },
-});
+    content: {
+        type: String,
+        required: true,
+    },
+    comments: {
+        type: [Schema.Types.ObjectId],
+        ref: "comments",
+        default: [],
+    },
+    createdAt: {
+        type: String,
+        default: "mese anno",
+        required: true,
+    },
+})
 
-export const BlogPost = mongoose.model("blogPosts", BlogPostsSchema);
+export const BlogPost = mongoose.model("blogPosts", BlogPostsSchema)
