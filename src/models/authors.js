@@ -15,8 +15,15 @@ const AuthorSchema = new Schema({
     },
     password: {
         type: String,
-        // required: [true, "Password required"],
-        required: true,
+        required: function () {
+            return this.googleId ? false : true
+        },
+    },
+    googleId: {
+        type: String,
+        required: function () {
+            return this.password ? false : true
+        },
     },
     dayOfBirth: {
         type: String,
