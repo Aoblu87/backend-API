@@ -29,7 +29,7 @@ authorsRouter
             expiresIn: "1h",
         })
 
-        res.status(200).json({ token, message: "Logged in" })
+        res.status(200).json({ token, payload, message: "Logged in" })
     })
 
     // CREA TOKEN---------GET BY ID autore per restituirgli un token, memorizzarlo nel local storage (frontend),controllare che sia valido per effettuare richieste (frontend)

@@ -15,8 +15,9 @@ verifyEmailRouter.post("/", async (req, res) => {
     let sendSmtpEmail = new brevo.SendSmtpEmail()
 
     sendSmtpEmail.subject = "Verify Your Email{{params.subject}}"
-    sendSmtpEmail.htmlContent = /*html*/ `${HTMLVerifyEmail}`
-    // ;("<html><body><h1>Common: This is my first transactional email {{params.parameter}}</h1></body></html>")
+    sendSmtpEmail.htmlContent = HTMLVerifyEmail()
+    //recuperare utente tramite email. generare token valido e lo invio nel url insieme all'id.
+
     sendSmtpEmail.sender = {
         name: process.env.BRAND_NAME,
         email: process.env.MY_EMAIL,

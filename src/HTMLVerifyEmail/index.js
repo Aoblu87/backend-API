@@ -1,4 +1,4 @@
-const HTMLVerifyEmail = /*html*/ `<!DOCTYPE html>
+const HTMLVerifyEmail = () => /*html*/ `<!DOCTYPE html>
 <html>
     <head>
         <meta name="viewport" content="width=device-width" />
@@ -64,6 +64,7 @@ const HTMLVerifyEmail = /*html*/ `<!DOCTYPE html>
                                                     if you don't click the
                                                     confirmation link above.
                                                 </p>
+                                                <a href="http://localhost:5173/api/authors/session">Click here to confirm</a>
                                             </td>
                                         </tr>
                                     </table>
@@ -95,4 +96,5 @@ const HTMLVerifyEmail = /*html*/ `<!DOCTYPE html>
         </table>
     </body>
 </html>`
+
 export default HTMLVerifyEmail
