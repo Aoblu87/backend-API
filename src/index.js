@@ -1,5 +1,5 @@
 import express from "express"
-import list from "express-list-endpoints"
+// import list from "express-list-endpoints"
 import mongoose from "mongoose"
 import { genericError } from "./middlewares/genericError.js"
 import apiRouter from "./routers/apiRouter.js"
@@ -18,7 +18,7 @@ mongoose
     .then(() => {
         server.listen(port, () => {
             console.log("Server listening to port: " + port)
-            console.table(list(server))
+            // console.table(list(server))
         })
     })
     .catch(() => {

@@ -1,8 +1,8 @@
-// const express = require("express")
-// const brevo = require("@getbrevo/brevo")
 import express from "express"
 import brevo from "@getbrevo/brevo"
-import HTMLVerifyEmail from "../HTMLVerifyEmail/index.js"
+import HTMLVerifyEmail from "../email/index.js"
+import createToken from "../email/createToken.js"
+import { Author } from "../models/authors.js"
 
 const verifyEmailRouter = express.Router()
 
@@ -13,11 +13,14 @@ apiKey.apiKey = process.env.BREVO_API_KEY
 
 verifyEmailRouter.post("/", async (req, res) => {
     let sendSmtpEmail = new brevo.SendSmtpEmail()
-
     sendSmtpEmail.subject = "Verify Your Email{{params.subject}}"
-    sendSmtpEmail.htmlContent = HTMLVerifyEmail()
-    //recuperare utente tramite email. generare token valido e lo invio nel url insieme all'id.
+    //Creo token da inviare nell'emai
 
+    const { _id } = req.body
+    // const user = await Author.findById({ _id })
+
+    const token = createToken(_id)
+    sendSmtpEmail.htmlContent = HTMLVerifyEmail(token, _id)
     sendSmtpEmail.sender = {
         name: process.env.BRAND_NAME,
         email: process.env.MY_EMAIL,
