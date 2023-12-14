@@ -16,10 +16,7 @@ authorsRouter
         if (!author) {
             return res.status(404).send({ message: "User not found" })
         }
-        const isPasswordCorrect = await bcrypt.compare(
-            password,
-            author.password
-        )
+        const isPasswordCorrect = bcrypt.compare(password, author.password)
         if (!isPasswordCorrect) {
             return res.status(401).json({ message: "Invalid password" })
         }
