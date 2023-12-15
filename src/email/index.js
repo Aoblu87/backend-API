@@ -1,4 +1,4 @@
-const HTMLVerifyEmail = (token, userId) => /*html*/ `<!DOCTYPE html>
+const HTMLVerifyEmail = (token, id) => /*html*/ `<!DOCTYPE html>
 <html lang="en">
 
     <head>
@@ -31,7 +31,7 @@ const HTMLVerifyEmail = (token, userId) => /*html*/ `<!DOCTYPE html>
                         paste
                         the URL below
                         into your web browser:
-                        <a href="http://localhost:5173?token=${token}&userId=${userId}" class="text-blue-600 underline">  CLICCA QUI</a>
+                        <a href="http://localhost:5173?token=${token}&userId=${id}" class="text-blue-600 underline">  CLICCA QUI</a>
                     </p>
                 </div>
             </div>

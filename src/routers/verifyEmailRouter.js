@@ -14,12 +14,12 @@ apiKey.apiKey = process.env.BREVO_API_KEY
 verifyEmailRouter.post("/", async (req, res) => {
     let sendSmtpEmail = new brevo.SendSmtpEmail()
     sendSmtpEmail.subject = "Verify Your Email{{params.subject}}"
+
     //Creo token da inviare nell'emai
 
     const { _id } = req.body
-    // const user = await Author.findById({ _id })
-
     const token = createToken(_id)
+
     sendSmtpEmail.htmlContent = HTMLVerifyEmail(token, _id)
     sendSmtpEmail.sender = {
         name: process.env.BRAND_NAME,
