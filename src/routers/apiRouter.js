@@ -13,22 +13,22 @@ const apiRouter = express.Router()
 
 apiRouter.use(express.json())
 
-var whitelist = [
-    "https://epicblog-backend.onrender.com",
-    "http://localhost:5173",
-    "https://candid-beignet-ebe06f.netlify.app",
-]
-var corsOptions = {
-    origin: function (origin, callback) {
-        if (whitelist.indexOf(origin) !== -1) {
-            callback(null, true)
-        } else {
-            callback(new Error("Not allowed by CORS"))
-        }
-    },
-}
+// var whitelist = [
+//     "https://epicblog-backend.onrender.com",
+//     "http://localhost:5173",
+//     "https://candid-beignet-ebe06f.netlify.app",
+// ]
+// var corsOptions = {
+//     origin: function (origin, callback) {
+//         if (whitelist.indexOf(origin) !== -1) {
+//             callback(null, true)
+//         } else {
+//             callback(new Error("Not allowed by CORS"))
+//         }
+//     },
+// }
 
-apiRouter.use(cors(corsOptions))
+apiRouter.use(cors())
 
 //Autenticazione Google
 passport.use(googleStrategy)
