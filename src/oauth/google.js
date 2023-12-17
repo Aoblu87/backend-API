@@ -5,7 +5,7 @@ const googleStrategy = new GoogleStrategy(
     {
         clientID: process.env.GOOGLE_CLIENT_ID,
         clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        callbackURL: `htt://localhost:3030/api/auth/google/callback`,
+        callbackURL: `http://localhost:3030/api/auth/google/callback`,
     },
     async function (_, __, profile, cb) {
         console.log(profile)
