@@ -22,18 +22,22 @@ googleRouter
             failureRedirect: "/",
             session: false,
         }),
-        async (req, res) => {
-            const payload = { id: req.user._id }
+        async (req, res, next) => {
+            try {
+                const payload = { id: req.user._id }
 
-            const token = jwt.sign(payload, process.env.JWT_SECRET, {
-                expiresIn: "1h",
-            })
+                const token = jwt.sign(payload, process.env.JWT_SECRET, {
+                    expiresIn: "1h",
+                })
 
-            // 4 - Dopo aver autenticato l'utente con Google, lo reindirizziamo
-            // al frontend che deve gestire i dati nell'URL oltreché nel localStorage
-            res.redirect(
-                `https://epicblog-backend.onrender.com?token=${token}&userId=${req.user._id}`
-            )
+                // 4 - Dopo aver autenticato l'utente con Google, lo reindirizziamo
+                // al frontend che deve gestire i dati nell'URL oltreché nel localStorage
+                res.redirect(
+                    `https://candid-beignet-ebe06f.netlify.app/?token=${token}&userId=${req.user._id}`
+                )
+            } catch (error) {
+                next(error)
+            }
         }
     )
 export default googleRouter
