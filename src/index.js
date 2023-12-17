@@ -13,6 +13,10 @@ server.use("/api", apiRouter)
 //MIDDLEWARES
 server.use(genericError)
 
+server.get("/health", function (req, res) {
+    res.status(200).send()
+})
+
 mongoose
     .connect(process.env.MONGO_URL)
     .then(() => {
