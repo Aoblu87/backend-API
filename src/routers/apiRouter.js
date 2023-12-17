@@ -16,7 +16,7 @@ apiRouter.use(express.json())
 var whitelist = [
     "https://epicblog-backend.onrender.com",
     "http://localhost:5173",
-    "https://candid-beignet-ebe06f.netlify.app/",
+    "https://candid-beignet-ebe06f.netlify.app",
 ]
 var corsOptions = {
     origin: function (origin, callback) {
