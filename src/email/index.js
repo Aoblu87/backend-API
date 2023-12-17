@@ -31,7 +31,7 @@ const HTMLVerifyEmail = (token, id) => /*html*/ `<!DOCTYPE html>
                         paste
                         the URL below
                         into your web browser:
-                        <a href="http://localhost:5173?token=${token}&userId=${id}" class="text-blue-600 underline">  CLICCA QUI</a>
+                        <a href="https://candid-beignet-ebe06f.netlify.app/?token=${token}&userId=${id}" class="text-blue-600 underline">  CLICCA QUI</a>
                     </p>
                 </div>
             </div>

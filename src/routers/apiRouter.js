@@ -13,7 +13,22 @@ const apiRouter = express.Router()
 
 apiRouter.use(express.json())
 
-apiRouter.use(cors())
+var whitelist = [
+    "https://epicblog-backend.onrender.com",
+    "http://localhost:5173",
+    "https://candid-beignet-ebe06f.netlify.app/",
+]
+var corsOptions = {
+    origin: function (origin, callback) {
+        if (whitelist.indexOf(origin) !== -1) {
+            callback(null, true)
+        } else {
+            callback(new Error("Not allowed by CORS"))
+        }
+    },
+}
+
+apiRouter.use(cors(corsOptions))
 
 //Autenticazione Google
 passport.use(googleStrategy)
