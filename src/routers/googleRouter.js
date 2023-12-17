@@ -32,7 +32,7 @@ googleRouter
             // 4 - Dopo aver autenticato l'utente con Google, lo reindirizziamo
             // al frontend che deve gestire i dati nell'URL oltreché nel localStorage
             res.redirect(
-                `https://candid-beignet-ebe06f.netlify.app?token=${token}&userId=${req.user._id}`
+                `https://epicblog-backend.onrender.com?token=${token}&userId=${req.user._id}`
             )
         }
     )
